@@ -131,12 +131,46 @@ body {
     background: rgba(255, 255, 255, 0.3);
 }
 
+/* 侧边栏描述文本 */
+.sidebar-description {
+    color: #9ca3af;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 0 12px;
+    margin-bottom: 16px;
+}
+
+/* 侧边栏特性 */
+.sidebar-features {
+    padding: 0 12px;
+}
+
+.sidebar-features .feature {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #9ca3af;
+    margin-bottom: 12px;
+}
+
+.sidebar-features .feature i {
+    color: #7359ff;
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-features .feature span {
+    font-size: 14px;
+}
+
 /* 主内容区域调整 */
 .main-content {
     margin-left: 240px;
     padding: 20px;
     min-height: 100vh;
-    background: #f9fafb;
+    background: #1f1f2b;
+    width: calc(100% - 240px);
 }
 
 /* 顶部搜索栏 */
@@ -197,9 +231,11 @@ body {
 
 /* 游戏网格 */
 .games-grid {
+    flex: 1;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
+    padding: 20px 0;
 }
 
 .game-card {
@@ -326,10 +362,15 @@ body {
     
     .main-content {
         margin-left: 0;
+        width: 100%;
     }
     
     .games-grid {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+    
+    .search-bar {
+        display: none;
     }
 }
 
@@ -350,4 +391,9 @@ body {
     .search-bar {
         display: none;
     }
+}
+
+/* 移除页脚相关样式 */
+.main-footer {
+    display: none;
 }
