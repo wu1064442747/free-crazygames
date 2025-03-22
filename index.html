@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Survivors - 免费在线游戏</title>
+    <meta name="description" content="Play free online games including action, puzzle, sports and more. Best collection of browser games with no download required.">
+    
+    <!-- 预加载关键资源 -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- 核心样式 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- 预加载游戏数据 -->
+    <link rel="preload" href="js/gameData.js" as="script">
+    
+    <!-- 延迟加载分析脚本 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YB62Q9K21N"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YB62Q9K21N');
+    </script>
+</head>
+<body>
+    <!-- 侧边栏 -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%237359ff'/%3E%3C/svg%3E" alt="Monster Survivors" width="32" height="32">
+            <span>Monster Survivors</span>
+        </div>
+        
+        <nav class="nav-section">
+            <h3>主要导航</h3>
+            <a href="/" class="nav-item active" data-category="all">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </a>
+            <a href="/new" class="nav-item" data-category="new">
+                <i class="fas fa-star"></i>
+                <span>最新游戏</span>
+            </a>
+            <a href="/hot" class="nav-item" data-category="hot">
+                <i class="fas fa-fire"></i>
+                <span>热门游戏</span>
+            </a>
+            <a href="/updated" class="nav-item" data-category="updated">
+                <i class="fas fa-sync"></i>
+                <span>最近更新</span>
+            </a>
+        </nav>
+
+        <nav class="nav-section">
+            <h3>游戏分类</h3>
+            <a href="/action" class="nav-item" data-category="action">
+                <i class="fas fa-gamepad"></i>
+                <span>动作游戏</span>
+            </a>
+            <a href="/adventure" class="nav-item" data-category="adventure">
+                <i class="fas fa-compass"></i>
+                <span>冒险游戏</span>
+            </a>
+            <a href="/puzzle" class="nav-item" data-category="puzzle">
+                <i class="fas fa-puzzle-piece"></i>
+                <span>益智游戏</span>
+            </a>
+            <a href="/strategy" class="nav-item" data-category="strategy">
+                <i class="fas fa-chess"></i>
+                <span>策略游戏</span>
+            </a>
+            <a href="/sports" class="nav-item" data-category="sports">
+                <i class="fas fa-futbol"></i>
+                <span>体育游戏</span>
+            </a>
+            <a href="/racing" class="nav-item" data-category="racing">
+                <i class="fas fa-car"></i>
+                <span>赛车游戏</span>
+            </a>
+            <a href="/shooting" class="nav-item" data-category="shooting">
+                <i class="fas fa-crosshairs"></i>
+                <span>射击游戏</span>
+            </a>
+            <a href="/multiplayer" class="nav-item" data-category="multiplayer">
+                <i class="fas fa-users"></i>
+                <span>多人游戏</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- 主要内容区域 -->
+    <main class="main-content">
+        <!-- 顶部搜索栏 -->
+        <div class="top-bar">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="搜索游戏...">
+            </div>
+        </div>
+
+        <!-- 游戏特性栏 -->
+        <div class="features-bar">
+            <div class="feature-item">
+                <i class="fas fa-gamepad"></i>
+                <span>4000+ 游戏</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-download"></i>
+                <span>无需下载</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-mobile-alt"></i>
+                <span>全设备支持</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-users"></i>
+                <span>多人游戏</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-gift"></i>
+                <span>完全免费</span>
+            </div>
+        </div>
+
+        <!-- 分类标签 -->
+        <div class="categories-bar">
+            <a href="#" class="category-tag active">全部</a>
+            <a href="#" class="category-tag">动作</a>
+            <a href="#" class="category-tag">冒险</a>
+            <a href="#" class="category-tag">益智</a>
+            <a href="#" class="category-tag">策略</a>
+            <a href="#" class="category-tag">体育</a>
+            <a href="#" class="category-tag">赛车</a>
+            <a href="#" class="category-tag">射击</a>
+            <a href="#" class="category-tag">多人</a>
+        </div>
+
+        <!-- 游戏网格 -->
+        <section class="games-grid" id="gamesGrid">
+            <!-- 加载占位符 -->
+            <div class="loading-placeholder">
+                <div class="spinner"></div>
+                <p>加载游戏中...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>Monster Survivors offers the best free online games collection. Play now!</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#featured">Featured Games</a></li>
+                    <li><a href="#new">New Games</a></li>
+                    <li><a href="#popular">Popular Games</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 延迟加载的脚本 -->
+    <script type="module">
+        import { gameData, categories, difficulties } from './js/gameData.js';
+
+        // 图片延迟加载函数
+        function lazyLoadImage(element) {
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        observer.unobserve(img);
+                    }
+                });
+            });
+            observer.observe(element);
+        }
+
+        // 生成游戏卡片的函数
+        function createGameCard(game) {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.innerHTML = `
+                ${game.isNew ? '<span class="game-badge badge-new">新游戏</span>' : ''}
+                ${game.playCount > 200000 ? '<span class="game-badge badge-hot">热门</span>' : ''}
+                <img data-src="${game.image}" alt="${game.title}" loading="lazy">
+                <div class="game-info">
+                    <h3 class="game-title">${game.title}</h3>
+                    <div class="game-meta">
+                        <div class="game-rating">
+                            <i class="fas fa-star"></i>
+                            <span>${game.rating}</span>
+                        </div>
+                        <span>•</span>
+                        <span>${game.category}</span>
+                    </div>
+                </div>
+            `;
+            
+            // 设置图片延迟加载
+            const img = card.querySelector('img');
+            lazyLoadImage(img);
+            
+            return card;
+        }
+
+        // 分批渲染游戏列表
+        function renderGames() {
+            const gamesGrid = document.getElementById('gamesGrid');
+            gamesGrid.innerHTML = ''; // 清除加载占位符
+            
+            const fragment = document.createDocumentFragment();
+            const batchSize = 12; // 每批加载的游戏数量
+            let currentIndex = 0;
+            
+            function renderBatch() {
+                const end = Math.min(currentIndex + batchSize, gameData.length);
+                for (let i = currentIndex; i < end; i++) {
+                    fragment.appendChild(createGameCard(gameData[i]));
+                }
+                gamesGrid.appendChild(fragment);
+                currentIndex = end;
+                
+                if (currentIndex < gameData.length) {
+                    requestAnimationFrame(renderBatch);
+                }
+            }
+            
+            renderBatch();
+        }
+
+        // 页面加载完成后渲染游戏
+        document.addEventListener('DOMContentLoaded', renderGames);
+
+        // 添加滚动加载
+        let isLoading = false;
+        window.addEventListener('scroll', () => {
+            if (isLoading) return;
+            
+            const scrollPos = window.innerHeight + window.pageYOffset;
+            const pageHeight = document.documentElement.scrollHeight;
+            
+            if (scrollPos >= pageHeight - 1000) {
+                isLoading = true;
+                // 这里可以添加加载更多游戏的逻辑
+                setTimeout(() => {
+                    isLoading = false;
+                }, 1000);
+            }
+        });
+    </script>
+    <script src="js/gameData.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
