@@ -1,5 +1,5 @@
 // 游戏分类定义
-export const categories = {
+const categories = {
     action: {
         id: 'action',
         name: '动作游戏',
@@ -93,7 +93,7 @@ function autoCategorizegame(game) {
 }
 
 // 游戏数据
-export const gameData = [
+const gameData = [
     {
         id: 'rise-up',
         title: 'Rise Up',
@@ -1717,38 +1717,24 @@ export const gameData = [
     category: autoCategorizegame(game)
 }));
 
-// 导出游戏难度等级
-export const difficulties = {
+// 处理未分类游戏
+function validateGameCategories(games) {
+    return games.map(game => {
+        if (!game.category) {
+            game.category = autoCategorizegame(game);
+        }
+        return game;
+    });
+}
+
+// 游戏难度定义
+const difficulties = {
     easy: '简单',
     medium: '中等',
     hard: '困难'
 };
 
-// 验证游戏分类分布
-function validateGameCategories(games) {
-    const distribution = {};
-    const uncategorized = [];
-    
-    games.forEach(game => {
-        if (!game.category) {
-            uncategorized.push(game.title);
-        } else {
-            distribution[game.category] = (distribution[game.category] || 0) + 1;
-        }
-    });
-    
-    console.log('游戏分类分布情况：');
-    Object.entries(distribution).forEach(([category, count]) => {
-        console.log(`${categories[category].name}: ${count}个游戏`);
-    });
-    
-    if (uncategorized.length > 0) {
-        console.log('\n未分类游戏：');
-        uncategorized.forEach(title => console.log(title));
-    }
-}
-
-// 执行验证
-validateGameCategories(gameData);
-
-export { gameData, categories, difficulties };
+// 将数据暴露为全局变量
+window.gameData = validateGameCategories(gameData);
+window.categories = categories;
+window.difficulties = difficulties;

@@ -46,8 +46,11 @@ body {
     color: var(--color-text);
     line-height: 1.6;
     display: flex;
+    flex-direction: column;
     min-height: 100vh;
     overflow-x: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 a {
@@ -150,6 +153,9 @@ img {
     text-decoration: none;
     border-radius: var(--border-radius-sm);
     transition: all var(--transition-fast);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .nav-item:hover, 
@@ -168,11 +174,14 @@ img {
     margin-right: 12px;
     font-size: 16px;
     text-align: center;
+    min-width: 20px;
 }
 
 .nav-item span {
     font-size: 14px;
     font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* 分隔线 */
@@ -236,10 +245,12 @@ img {
 .main-content {
     margin-left: var(--sidebar-width);
     padding: var(--spacing-md);
-    min-height: 100vh;
+    flex: 1 0 auto;
     background: var(--color-background);
     width: calc(100% - var(--sidebar-width));
     transition: margin var(--transition);
+    display: flex;
+    flex-direction: column;
 }
 
 /* 顶部搜索栏 */
@@ -342,33 +353,29 @@ img {
     padding: var(--spacing-md) 0;
 }
 
+/* 游戏卡片 */
 .game-card {
-    background: var(--color-card);
+    background-color: var(--color-card);
     border-radius: var(--border-radius);
     overflow: hidden;
-    transition: all var(--transition);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    cursor: pointer;
     position: relative;
-    box-shadow: var(--shadow);
 }
 
-.game-card:hover,
+.game-card:hover, 
 .game-card:focus {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
 }
 
-.game-card:focus {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-}
-
 .game-cover {
     position: relative;
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 宽高比 */
     overflow: hidden;
+    padding-top: 56.25%; /* 16:9 宽高比 */
 }
 
+.game-cover picture,
 .game-cover img {
     position: absolute;
     top: 0;
@@ -376,11 +383,18 @@ img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--transition);
+    display: block;
 }
 
-.game-card:hover .game-cover img {
-    transform: scale(1.05);
+/* 确保图片正确加载和显示 */
+.game-cover img {
+    background-color: var(--color-card);
+    transition: opacity var(--transition-fast);
+}
+
+.game-cover img[src$='.svg'] {
+    object-fit: contain;
+    padding: var(--spacing-sm);
 }
 
 .game-info {
@@ -426,12 +440,14 @@ img {
 
 .badge.new {
     right: var(--spacing-sm);
+    top: var(--spacing-sm);
     background: var(--color-badge-new);
     color: white;
 }
 
 .badge.popular {
-    left: var(--spacing-sm);
+    right: var(--spacing-sm);
+    top: calc(var(--spacing-sm) + 26px); /* 在"新游戏"标签下方 */
     background: var(--color-badge-hot);
     color: white;
 }
@@ -608,13 +624,13 @@ img {
 
 /* 页脚 */
 .main-footer {
-    margin-top: auto;
     background-color: var(--color-sidebar);
     color: var(--color-text);
     padding: var(--spacing-md) 0;
     margin-left: var(--sidebar-width);
     width: calc(100% - var(--sidebar-width));
     transition: margin var(--transition), width var(--transition);
+    margin-top: auto;
 }
 
 .footer-container {
@@ -738,6 +754,19 @@ img {
         width: 100%;
     }
     
+    body {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .main-content {
+        flex: 1 0 auto;
+    }
+    
+    .main-footer {
+        flex-shrink: 0;
+    }
+    
     .games-grid {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     }
@@ -789,4 +818,45 @@ img {
     :root {
         --color-primary: #8f67ff;
     }
+}
+
+/* 游戏预览模态框样式 */
+.preview-header {
+    margin-bottom: var(--spacing-md);
+}
+
+.preview-header h2 {
+    font-size: 1.8rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.preview-header .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.top-play-button {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing);
+    margin-bottom: var(--spacing);
+}
+
+.play-button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: var(--border-radius-sm);
+    font-weight: 500;
+    text-align: center;
+    transition: background-color var(--transition-fast);
+    display: inline-block;
+}
+
+.play-button:hover {
+    background-color: var(--color-primary-dark);
+    text-decoration: none;
 }

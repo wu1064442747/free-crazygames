@@ -1,21 +1,20 @@
 'use strict';
 
-import { gameData, categories } from './gameData.js';
-import { createGameCard, filterGames, sortGames, formatNumber, formatDate } from './utils.js';
-
 document.addEventListener('DOMContentLoaded', function() {
-    // 导入游戏数据和工具函数
-    const { gameData, categories } = window;
+    // 使用全局变量获取游戏数据和分类
+    const gameData = window.gameData || [];
+    const categories = window.categories || {};
+    
     let currentPage = 1;
     const gamesPerPage = 12;
     
     // 初始化状态
     const state = {
         filters: {
-            category: 'all',
-            difficulty: null,
-            search: '',
-            sort: 'popular'
+        category: 'all',
+        difficulty: null,
+        search: '',
+        sort: 'popular'
         },
         favorites: loadFromLocalStorage('favorites', []),
         recentGames: loadFromLocalStorage('recentGames', []),
@@ -26,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 初始化页面
     // ------------------------
     initializePage();
-    
+
     // ------------------------
     // 主要函数
     // ------------------------
@@ -83,38 +82,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const categoryList = document.querySelector('.nav-section[aria-label="游戏分类导航"]');
         if (!categoryList) return;
         
-        categoryList.innerHTML = '<h3>游戏分类</h3>';
+        // 不要清空现有HTML，使用已有的静态HTML结构
+        // 直接为现有的导航项添加事件监听器
         
-        // 添加"全部"分类
-        const allCategoryLink = document.createElement('a');
-        allCategoryLink.href = '#';
-        allCategoryLink.className = 'nav-item active';
-        allCategoryLink.setAttribute('data-category', 'all');
-        allCategoryLink.innerHTML = '<i class="fas fa-th-large" aria-hidden="true"></i><span>全部游戏</span>';
-        categoryList.appendChild(allCategoryLink);
-        
-        // 添加其他分类
-        Object.entries(categories).forEach(([id, category]) => {
-            const link = document.createElement('a');
-            link.href = '#';
-            link.className = 'nav-item';
-            link.setAttribute('data-category', id);
-            link.innerHTML = `<i class="${category.icon}" aria-hidden="true"></i><span>${category.name}</span>`;
-            categoryList.appendChild(link);
-        });
-
         // 更新顶部分类标签
         const categoriesBar = document.querySelector('.categories-bar');
         if (!categoriesBar) return;
         
-        categoriesBar.innerHTML = `
-            <a href="#" class="category-tag active" data-category="all" role="tab" aria-selected="true">全部</a>
-            ${Object.entries(categories)
-                .map(([id, category]) => 
-                    `<a href="#" class="category-tag" data-category="${id}" role="tab" aria-selected="false">${category.name.replace('游戏', '')}</a>`
-                ).join('')}
-        `;
-
         // 添加分类点击事件
         document.querySelectorAll('[data-category]').forEach(item => {
             item.addEventListener('click', (e) => {
@@ -140,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    
+
     function setupSearch() {
         const searchInput = document.getElementById('searchInput');
         const suggestionsContainer = document.getElementById('searchSuggestions');
@@ -166,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     suggestionsContainer.innerHTML = '';
                     suggestionsContainer.classList.remove('active');
                 }
-            }, 300);
+        }, 300);
         });
         
         // 搜索框获得焦点时显示最近搜索
@@ -226,11 +200,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         state.filters.search = item.textContent.trim();
                         updateGameDisplay();
                         suggestionsContainer.classList.remove('active');
-                    }
-                });
+                }
             });
-        }
-        
+        });
+    }
+
         suggestionsContainer.classList.add('active');
     }
     
@@ -318,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!gamesGrid) return;
         
         if (clearGrid) {
-            gamesGrid.innerHTML = '';
+        gamesGrid.innerHTML = '';
         }
         
         if (games.length === 0) {
@@ -336,26 +310,26 @@ document.addEventListener('DOMContentLoaded', function() {
             gameCard.setAttribute('tabindex', '0');
             
             // 使用WebP和响应式图片
-            const imageUrl = game.image.replace(/\.(jpg|jpeg|png)$/, '.webp');
+            const imageUrl = optimizeImageUrl(game.image);
             const fallbackUrl = game.image;
             
             gameCard.innerHTML = `
                 <div class="game-cover">
                     <picture>
                         <source srcset="${imageUrl}" type="image/webp">
-                        <img src="${fallbackUrl}" alt="${game.title}" loading="lazy" width="300" height="169">
+                        <img src="${fallbackUrl}" alt="${escapeHtml(game.title)}" loading="lazy" width="300" height="169" onerror="this.onerror=null; this.src='img/placeholder.svg';">
                     </picture>
                     ${game.isNew ? '<span class="badge new">新游戏</span>' : ''}
                     ${game.playCount > 200000 ? '<span class="badge popular">热门</span>' : ''}
-                    <button class="favorite-btn ${state.favorites.includes(game.id) ? 'active' : ''}" aria-label="${state.favorites.includes(game.id) ? '取消收藏' : '收藏'} ${game.title}">
+                    <button class="favorite-btn ${state.favorites.includes(game.id) ? 'active' : ''}" aria-label="${state.favorites.includes(game.id) ? '取消收藏' : '收藏'} ${escapeHtml(game.title)}">
                         <i class="fas fa-heart" aria-hidden="true"></i>
                     </button>
                 </div>
                 <div class="game-info">
-                    <h3>${game.title}</h3>
+                    <h3>${escapeHtml(game.title)}</h3>
                     <div class="game-meta">
                         <span class="game-rating">
-                            <i class="fas fa-star" aria-hidden="true"></i> ${game.rating}
+                            <i class="fas fa-star" aria-hidden="true"></i> ${game.rating || '4.0'}
                         </span>
                         <span>${categories[game.category]?.name || game.category}</span>
                     </div>
@@ -464,6 +438,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span class="rating"><i class="fas fa-star" aria-hidden="true"></i> ${game.rating}</span>
                     ${game.difficulty ? `<span class="difficulty">${game.difficulty}</span>` : ''}
                 </div>
+                <div class="top-play-button">
+                    <a href="${game.url || '#'}" class="play-button" target="_blank" rel="noopener">开始游戏</a>
+                    <button class="favorite-btn ${state.favorites.includes(gameId) ? 'active' : ''}" aria-label="${state.favorites.includes(gameId) ? '取消收藏' : '收藏'} ${game.title}">
+                        <i class="fas fa-heart" aria-hidden="true"></i> ${state.favorites.includes(gameId) ? '已收藏' : '收藏游戏'}
+                    </button>
+                </div>
             </div>
             <div class="preview-image">
                 <picture>
@@ -509,13 +489,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     `).join('')}
                 </div>
             </div>` : ''}
-            
-            <div class="preview-footer">
-                <a href="${game.url || '#'}" class="play-button" target="_blank" rel="noopener">开始游戏</a>
-                <button class="favorite-btn ${state.favorites.includes(gameId) ? 'active' : ''}" aria-label="${state.favorites.includes(gameId) ? '取消收藏' : '收藏'} ${game.title}">
-                    <i class="fas fa-heart" aria-hidden="true"></i> ${state.favorites.includes(gameId) ? '已收藏' : '收藏游戏'}
-                </button>
-            </div>
         `;
         
         // 添加推荐游戏点击事件
@@ -541,11 +514,13 @@ document.addEventListener('DOMContentLoaded', function() {
             favoriteBtn.addEventListener('click', () => {
                 toggleFavorite(gameId);
                 
-                // 更新按钮状态
+                // 更新所有收藏按钮状态
                 const isFavorite = state.favorites.includes(gameId);
-                favoriteBtn.classList.toggle('active', isFavorite);
-                favoriteBtn.innerHTML = `<i class="fas fa-heart" aria-hidden="true"></i> ${isFavorite ? '已收藏' : '收藏游戏'}`;
-                favoriteBtn.setAttribute('aria-label', `${isFavorite ? '取消收藏' : '收藏'} ${game.title}`);
+                document.querySelectorAll(`.favorite-btn[aria-label*="${game.title}"]`).forEach(btn => {
+                    btn.classList.toggle('active', isFavorite);
+                    btn.innerHTML = `<i class="fas fa-heart" aria-hidden="true"></i> ${isFavorite ? '已收藏' : '收藏游戏'}`;
+                    btn.setAttribute('aria-label', `${isFavorite ? '取消收藏' : '收藏'} ${game.title}`);
+                });
                 
                 // 更新所有游戏卡片中的收藏按钮
                 updateFavoriteButtons();

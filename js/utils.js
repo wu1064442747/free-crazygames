@@ -8,7 +8,7 @@
  * @param {boolean} isFavorite 是否已收藏
  * @returns {string} 卡片HTML字符串
  */
-export function createGameCard(game, isFavorite = false) {
+function createGameCard(game, isFavorite = false) {
     // 使用WebP格式图片，提供兼容性后备方案
     const imageUrl = optimizeImageUrl(game.image);
     
@@ -44,7 +44,7 @@ export function createGameCard(game, isFavorite = false) {
  * @param {Object} filters 过滤条件
  * @returns {Array} 过滤后的游戏数组
  */
-export function filterGames(games, filters) {
+function filterGames(games, filters) {
     if (!games || !Array.isArray(games)) return [];
     
     return games.filter(game => {
@@ -76,7 +76,7 @@ export function filterGames(games, filters) {
  * @param {string} sortBy 排序方式
  * @returns {Array} 排序后的游戏数组
  */
-export function sortGames(games, sortBy) {
+function sortGames(games, sortBy) {
     if (!games || !Array.isArray(games)) return [];
     
     const sortedGames = [...games]; // 创建副本以避免修改原数组
@@ -97,7 +97,7 @@ export function sortGames(games, sortBy) {
  * @param {number} num 要格式化的数字
  * @returns {string} 格式化后的字符串
  */
-export function formatNumber(num) {
+function formatNumber(num) {
     if (!num) return '0';
     
     if (num >= 1000000) {
@@ -117,7 +117,7 @@ export function formatNumber(num) {
  * @param {string} dateString 日期字符串
  * @returns {string} 格式化后的日期
  */
-export function formatDate(dateString) {
+function formatDate(dateString) {
     if (!dateString) return '未知';
     
     const date = new Date(dateString);
@@ -135,7 +135,7 @@ export function formatDate(dateString) {
  * @param {Object} game 游戏数据对象
  * @returns {string} 生成的描述
  */
-export function generateGameDescription(game) {
+function generateGameDescription(game) {
     if (!game) return '';
     
     // 如果游戏已有描述，直接返回
@@ -177,7 +177,7 @@ export function generateGameDescription(game) {
  * @param {number} count 推荐数量
  * @returns {Array} 推荐游戏列表
  */
-export function getRecommendedGames(gameId, allGames, count = 6) {
+function getRecommendedGames(gameId, allGames, count = 6) {
     if (!gameId || !allGames || !Array.isArray(allGames)) return [];
     
     const currentGame = allGames.find(g => g.id === gameId);
@@ -197,7 +197,7 @@ export function getRecommendedGames(gameId, allGames, count = 6) {
  * @param {string} url 原始图片URL
  * @returns {string} 优化后的URL
  */
-export function optimizeImageUrl(url) {
+function optimizeImageUrl(url) {
     if (!url) return '';
     
     // 检查URL是否已经是WebP格式
@@ -213,7 +213,7 @@ export function optimizeImageUrl(url) {
  * 延迟加载图片
  * @param {HTMLImageElement} imgElement 图片元素
  */
-export function lazyLoadImage(imgElement) {
+function lazyLoadImage(imgElement) {
     if (!imgElement) return;
     
     // 使用IntersectionObserver API
@@ -247,7 +247,7 @@ export function lazyLoadImage(imgElement) {
  * @param {string} text 要转义的文本
  * @returns {string} 转义后的安全文本
  */
-export function escapeHtml(text) {
+function escapeHtml(text) {
     if (!text) return '';
     
     const map = {
@@ -266,7 +266,7 @@ export function escapeHtml(text) {
  * @param {string} key 存储键名
  * @param {any} data 要存储的数据
  */
-export function saveToLocalStorage(key, data) {
+function saveToLocalStorage(key, data) {
     try {
         localStorage.setItem(key, JSON.stringify(data));
         return true;
@@ -282,7 +282,7 @@ export function saveToLocalStorage(key, data) {
  * @param {any} defaultValue 默认值
  * @returns {any} 存储的数据或默认值
  */
-export function loadFromLocalStorage(key, defaultValue) {
+function loadFromLocalStorage(key, defaultValue) {
     try {
         const data = localStorage.getItem(key);
         return data ? JSON.parse(data) : defaultValue;
@@ -291,3 +291,17 @@ export function loadFromLocalStorage(key, defaultValue) {
         return defaultValue;
     }
 }
+
+// 将工具函数暴露为全局变量
+window.createGameCard = createGameCard;
+window.filterGames = filterGames;
+window.sortGames = sortGames;
+window.formatNumber = formatNumber;
+window.formatDate = formatDate;
+window.generateGameDescription = generateGameDescription;
+window.getRecommendedGames = getRecommendedGames;
+window.optimizeImageUrl = optimizeImageUrl;
+window.lazyLoadImage = lazyLoadImage;
+window.escapeHtml = escapeHtml;
+window.saveToLocalStorage = saveToLocalStorage;
+window.loadFromLocalStorage = loadFromLocalStorage;
