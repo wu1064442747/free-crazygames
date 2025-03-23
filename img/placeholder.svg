@@ -2,5 +2,5 @@
   <rect width="300" height="169" fill="#2a2b36"/>
   <rect x="125" y="49.5" width="50" height="50" rx="5" fill="#7359ff"/>
   <path d="M150 40 L165 65 L150 90 L135 65 Z" fill="#7359ff"/>
-  <text x="150" y="125" font-family="Arial, sans-serif" font-size="14" fill="#ffffff" text-anchor="middle">图片加载中</text>
+  <text x="150" y="125" font-family="Arial, sans-serif" font-size="14" fill="#ffffff" text-anchor="middle">加载游戏图片中</text>
 </svg> 

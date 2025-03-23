@@ -84,11 +84,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 不要清空现有HTML，使用已有的静态HTML结构
         // 直接为现有的导航项添加事件监听器
-        
+
         // 更新顶部分类标签
         const categoriesBar = document.querySelector('.categories-bar');
         if (!categoriesBar) return;
-        
+
         // 添加分类点击事件
         document.querySelectorAll('[data-category]').forEach(item => {
             item.addEventListener('click', (e) => {
@@ -309,16 +309,15 @@ document.addEventListener('DOMContentLoaded', function() {
             gameCard.setAttribute('data-id', game.id);
             gameCard.setAttribute('tabindex', '0');
             
-            // 使用WebP和响应式图片
-            const imageUrl = optimizeImageUrl(game.image);
-            const fallbackUrl = game.image;
-            
             gameCard.innerHTML = `
                 <div class="game-cover">
-                    <picture>
-                        <source srcset="${imageUrl}" type="image/webp">
-                        <img src="${fallbackUrl}" alt="${escapeHtml(game.title)}" loading="lazy" width="300" height="169" onerror="this.onerror=null; this.src='img/placeholder.svg';">
-                    </picture>
+                    <div class="iframe-container">
+                        ${game.url ? `<iframe src="${game.url}" title="${escapeHtml(game.title)}" loading="lazy" frameborder="0" sandbox="allow-same-origin allow-scripts"></iframe>` : 
+                        `<div class="no-preview">
+                            <i class="fas fa-gamepad"></i>
+                            <span>无预览</span>
+                        </div>`}
+                    </div>
                     ${game.isNew ? '<span class="badge new">新游戏</span>' : ''}
                     ${game.playCount > 200000 ? '<span class="badge popular">热门</span>' : ''}
                     <button class="favorite-btn ${state.favorites.includes(game.id) ? 'active' : ''}" aria-label="${state.favorites.includes(game.id) ? '取消收藏' : '收藏'} ${escapeHtml(game.title)}">
@@ -445,11 +444,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     </button>
                 </div>
             </div>
-            <div class="preview-image">
-                <picture>
-                    <source srcset="${game.image.replace(/\.(jpg|jpeg|png)$/, '.webp')}" type="image/webp">
-                    <img src="${game.image}" alt="${game.title}" width="800" height="450">
-                </picture>
+            <div class="preview-iframe-container">
+                ${game.url ? 
+                    `<iframe src="${game.url}" title="${escapeHtml(game.title)}" frameborder="0" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>` : 
+                    `<div class="no-preview-large">
+                        <i class="fas fa-gamepad"></i>
+                        <p>该游戏暂无可用预览</p>
+                    </div>`
+                }
             </div>
             <div class="preview-body">
                 <p class="description">${game.description}</p>
