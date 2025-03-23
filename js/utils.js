@@ -9,16 +9,15 @@
  * @returns {string} 卡片HTML字符串
  */
 function createGameCard(game, isFavorite = false) {
-    // 使用WebP格式图片，提供兼容性后备方案
-    const imageUrl = optimizeImageUrl(game.image);
+    if (!game) return '';
     
     return `
         <div class="game-card" data-id="${game.id}" tabindex="0">
             <div class="game-cover">
-                <picture>
-                    <source srcset="${imageUrl}" type="image/webp">
-                    <img src="${game.image}" alt="${escapeHtml(game.title)}" loading="lazy" width="300" height="169">
-                </picture>
+                <img src="img/screenshots/${game.id}.png" 
+                     alt="${escapeHtml(game.title)}" 
+                     loading="lazy"
+                     onerror="this.onerror=null; this.src='img/placeholder.svg';">
                 ${game.isNew ? '<span class="badge new">新游戏</span>' : ''}
                 ${game.playCount > 200000 ? '<span class="badge popular">热门</span>' : ''}
                 <button class="favorite-btn ${isFavorite ? 'active' : ''}" aria-label="${isFavorite ? '取消收藏' : '收藏'} ${escapeHtml(game.title)}">
@@ -31,7 +30,7 @@ function createGameCard(game, isFavorite = false) {
                     <span class="game-rating">
                         <i class="fas fa-star" aria-hidden="true"></i> ${game.rating || '4.0'}
                     </span>
-                    <span>${escapeHtml(game.category)}</span>
+                    <span>${window.categories && window.categories[game.category]?.name || game.category}</span>
                 </div>
             </div>
         </div>
@@ -173,17 +172,16 @@ function generateGameDescription(game) {
 /**
  * 获取游戏的推荐游戏列表
  * @param {string} gameId 当前游戏ID
- * @param {Array} allGames 所有游戏数据
  * @param {number} count 推荐数量
  * @returns {Array} 推荐游戏列表
  */
-function getRecommendedGames(gameId, allGames, count = 6) {
-    if (!gameId || !allGames || !Array.isArray(allGames)) return [];
+function getRecommendedGames(gameId, count = 6) {
+    if (!gameId || !window.gameData) return [];
     
-    const currentGame = allGames.find(g => g.id === gameId);
+    const currentGame = window.gameData.find(g => g.id === gameId);
     if (!currentGame) return [];
     
-    return allGames
+    return window.gameData
         .filter(g => g.id !== gameId) // 排除当前游戏
         .filter(g => g.category === currentGame.category || // 同类游戏
                   (g.tags && currentGame.tags && // 有相同标签的游戏
@@ -250,49 +248,44 @@ function lazyLoadImage(imgElement) {
 function escapeHtml(text) {
     if (!text) return '';
     
-    const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-    };
-    
-    return text.replace(/[&<>"']/g, m => map[m]);
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 /**
- * 本地存储操作：保存数据
+ * 保存数据到本地存储
  * @param {string} key 存储键名
  * @param {any} data 要存储的数据
  */
 function saveToLocalStorage(key, data) {
     try {
         localStorage.setItem(key, JSON.stringify(data));
-        return true;
     } catch (e) {
-        console.error('本地存储保存失败:', e);
-        return false;
+        console.error('保存到本地存储失败:', e);
     }
 }
 
 /**
- * 本地存储操作：读取数据
+ * 从本地存储加载数据
  * @param {string} key 存储键名
  * @param {any} defaultValue 默认值
- * @returns {any} 存储的数据或默认值
+ * @returns {any} 加载的数据或默认值
  */
 function loadFromLocalStorage(key, defaultValue) {
     try {
         const data = localStorage.getItem(key);
         return data ? JSON.parse(data) : defaultValue;
     } catch (e) {
-        console.error('本地存储读取失败:', e);
+        console.error('从本地存储加载失败:', e);
         return defaultValue;
     }
 }
 
-// 将工具函数暴露为全局变量
+// 将所有函数挂载到 window 对象上，使其全局可用
 window.createGameCard = createGameCard;
 window.filterGames = filterGames;
 window.sortGames = sortGames;

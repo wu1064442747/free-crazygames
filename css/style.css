@@ -386,10 +386,20 @@ img {
     display: block;
 }
 
-/* 确保图片正确加载和显示 */
+/* 游戏封面图片样式 */
 .game-cover img {
-    background-color: var(--color-card);
-    transition: opacity var(--transition-fast);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition);
+    border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+}
+
+.game-card:hover .game-cover img {
+    transform: scale(1.05);
 }
 
 .game-cover img[src$='.svg'] {
@@ -880,81 +890,79 @@ img {
     border-width: 3px;
 }
 
-/* iframe容器样式 */
-.iframe-container {
-    position: absolute;
-    top: 0;
-    left: 0;
+/* 游戏详情预览图片样式 */
+.preview-image-container {
     width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background-color: var(--color-card);
-}
-
-.iframe-container iframe {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border: none;
-    pointer-events: none; /* 禁止iframe交互，避免点击冲突 */
-}
-
-.no-preview {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-secondary);
-    background-color: var(--color-card);
-}
-
-.no-preview i {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
-
-/* 鼠标悬停时允许交互 */
-.game-card:hover .iframe-container iframe {
-    pointer-events: auto;
-}
-
-/* 游戏预览iframe */
-.preview-iframe-container {
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%; /* 16:9 宽高比 */
     position: relative;
     margin-bottom: var(--spacing-md);
     border-radius: var(--border-radius-sm);
     overflow: hidden;
+    box-shadow: var(--shadow);
 }
 
-.preview-iframe-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
+.preview-image-container img {
     width: 100%;
-    height: 100%;
+    display: block;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.preview-image-container iframe {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16 / 9;
     border: none;
+    height: 500px;
 }
 
-.no-preview-large {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+/* 游戏推荐卡片样式 */
+.recommended-games {
+    margin-top: var(--spacing-md);
+}
+
+.recommended-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--spacing);
+    margin-top: var(--spacing);
+}
+
+.recommended-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-card);
-    color: var(--color-text-secondary);
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform var(--transition-fast), background var(--transition-fast);
 }
 
-.no-preview-large i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+.recommended-card:hover {
+    transform: translateY(-3px);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.recommended-card img {
+    width: 100%;
+    height: 68px;
+    object-fit: cover;
+    border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+    display: block;
+}
+
+.rec-info {
+    padding: var(--spacing-sm);
+}
+
+.rec-info h4 {
+    font-size: 14px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rec-meta {
+    font-size: 12px;
+    color: var(--color-text-secondary);
 }
