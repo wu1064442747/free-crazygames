@@ -4,7 +4,7 @@ import { createGameCard, filterGames, sortGames, formatNumber, formatDate } from
 document.addEventListener('DOMContentLoaded', function() {
     // 初始化状态
     let currentFilters = {
-        category: null,
+        category: 'all',
         difficulty: null,
         search: '',
         sort: 'popular'
@@ -28,29 +28,84 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function loadCategories() {
-        const categoryList = document.getElementById('categoryList');
-        Object.entries(categories).forEach(([name, data]) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <a href="#" data-category="${data.id}">
-                    <span class="category-icon">${data.icon}</span>
-                    ${name}
-                </a>
-            `;
-            categoryList.appendChild(li);
+        // 更新侧边栏分类
+        const categoryList = document.querySelector('.nav-section:last-child');
+        categoryList.innerHTML = '<h3>游戏分类</h3>';
+        
+        // 添加"全部"分类
+        const allCategoryLink = document.createElement('a');
+        allCategoryLink.href = '#';
+        allCategoryLink.className = 'nav-item active';
+        allCategoryLink.setAttribute('data-category', 'all');
+        allCategoryLink.innerHTML = '<i class="fas fa-th-large"></i><span>全部游戏</span>';
+        categoryList.appendChild(allCategoryLink);
+        
+        // 添加其他分类
+        Object.entries(categories).forEach(([id, category]) => {
+            const link = document.createElement('a');
+            link.href = '#';
+            link.className = 'nav-item';
+            link.setAttribute('data-category', id);
+            link.innerHTML = `${category.icon}<span>${category.name}</span>`;
+            categoryList.appendChild(link);
+        });
+
+        // 更新顶部分类标签
+        const categoriesBar = document.querySelector('.categories-bar');
+        categoriesBar.innerHTML = `
+            <a href="#" class="category-tag active" data-category="all">全部</a>
+            ${Object.entries(categories)
+                .map(([id, category]) => 
+                    `<a href="#" class="category-tag" data-category="${id}">${category.name.replace('游戏', '')}</a>`
+                ).join('')}
+        `;
+
+        // 添加分类点击事件
+        document.querySelectorAll('[data-category]').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = e.currentTarget.getAttribute('data-category');
+                
+                // 更新激活状态
+                document.querySelectorAll('[data-category]').forEach(el => {
+                    el.classList.toggle('active', el.getAttribute('data-category') === category);
+                });
+                
+                // 更新过滤器并显示游戏
+                currentFilters.category = category;
+                updateGameDisplay();
+            });
         });
     }
 
     function updateGameDisplay() {
-        // 筛选游戏
-        let filteredGames = filterGames(gameData, currentFilters);
+        const gamesGrid = document.getElementById('gamesGrid');
         
-        // 排序游戏
-        filteredGames = sortGames(filteredGames, currentFilters.sort);
-
-        // 更新显示
-        const gamesGrid = document.querySelector('.games-grid');
-        gamesGrid.innerHTML = filteredGames.map(game => createGameCard(game)).join('');
+        // 显示加载状态
+        gamesGrid.innerHTML = '<div class="loading-placeholder"><div class="spinner"></div><p>加载游戏中...</p></div>';
+        
+        // 过滤游戏
+        let filteredGames = gameData;
+        
+        // 应用分类过滤
+        if (currentFilters.category !== 'all') {
+            filteredGames = filteredGames.filter(game => game.category === currentFilters.category);
+        }
+        
+        // 应用搜索过滤
+        if (currentFilters.search) {
+            const searchTerm = currentFilters.search.toLowerCase();
+            filteredGames = filteredGames.filter(game => 
+                game.title.toLowerCase().includes(searchTerm) ||
+                game.description.toLowerCase().includes(searchTerm) ||
+                (game.tags && game.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
+            );
+        }
+        
+        // 延迟显示以展示加载动画
+        setTimeout(() => {
+            renderGames(filteredGames);
+        }, 300);
     }
 
     function setupEventListeners() {
@@ -70,16 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('difficultyFilter').addEventListener('change', (e) => {
             currentFilters.difficulty = e.target.value === 'all' ? null : e.target.value;
             updateGameDisplay();
-        });
-
-        // 分类点击
-        document.getElementById('categoryList').addEventListener('click', (e) => {
-            if (e.target.closest('a')) {
-                e.preventDefault();
-                const category = e.target.closest('a').dataset.category;
-                currentFilters.category = category === currentFilters.category ? null : category;
-                updateGameDisplay();
-            }
         });
 
         // 游戏预览功能
@@ -197,6 +242,71 @@ document.addEventListener('DOMContentLoaded', function() {
         stats[gameId].plays++;
         stats[gameId].lastPlayed = new Date().toISOString();
         localStorage.setItem('gameStats', JSON.stringify(stats));
+    }
+
+    // 渲染游戏卡片
+    function renderGames(games) {
+        const gamesGrid = document.querySelector('.games-grid');
+        if (!gamesGrid) return;
+        
+        gamesGrid.innerHTML = '';
+        
+        games.forEach(game => {
+            const gameCard = document.createElement('div');
+            gameCard.className = 'game-card';
+            gameCard.innerHTML = `
+                <div class="game-cover">
+                    <img src="${game.image}" alt="${game.title}" loading="lazy">
+                    ${game.isNew ? '<span class="badge new">新游戏</span>' : ''}
+                    ${game.playCount > 200000 ? '<span class="badge popular">热门</span>' : ''}
+                </div>
+                <div class="game-info">
+                    <h3>${game.title}</h3>
+                    <div class="game-meta">
+                        <span class="rating">
+                            <i class="fas fa-star"></i> ${game.rating}
+                        </span>
+                        <span class="category">${categories[game.category].name}</span>
+                    </div>
+                </div>
+            `;
+            
+            // 添加点击事件处理
+            gameCard.addEventListener('click', () => {
+                // 如果有游戏URL，则跳转到游戏页面
+                if (game.url) {
+                    window.location.href = game.url;
+                }
+            });
+            
+            // 添加鼠标悬停效果
+            gameCard.style.cursor = 'pointer';
+            gameCard.addEventListener('mouseenter', () => {
+                gameCard.style.transform = 'translateY(-5px)';
+                gameCard.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)';
+            });
+            
+            gameCard.addEventListener('mouseleave', () => {
+                gameCard.style.transform = 'translateY(0)';
+                gameCard.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+            });
+            
+            gamesGrid.appendChild(gameCard);
+        });
+    }
+
+    // 处理搜索功能
+    const searchInput = document.querySelector('.search-bar input');
+    let searchTimeout;
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                currentFilters.search = this.value.trim();
+                updateGameDisplay();
+            }, 300);
+        });
     }
 });
 

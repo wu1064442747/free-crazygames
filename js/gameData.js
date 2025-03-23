@@ -1,19 +1,108 @@
+// 游戏分类定义
+export const categories = {
+    action: {
+        id: 'action',
+        name: '动作游戏',
+        icon: '<i class="fas fa-gamepad"></i>',
+        keywords: ['action', 'fight', 'battle', 'run', 'jump', 'shooter']
+    },
+    adventure: {
+        id: 'adventure',
+        name: '冒险游戏',
+        icon: '<i class="fas fa-compass"></i>',
+        keywords: ['adventure', 'explore', 'quest', 'journey', 'story']
+    },
+    puzzle: {
+        id: 'puzzle',
+        name: '益智游戏',
+        icon: '<i class="fas fa-puzzle-piece"></i>',
+        keywords: ['puzzle', 'brain', 'logic', 'match', 'solve', 'think']
+    },
+    strategy: {
+        id: 'strategy',
+        name: '策略游戏',
+        icon: '<i class="fas fa-chess"></i>',
+        keywords: ['strategy', 'build', 'manage', 'plan', 'tower']
+    },
+    sports: {
+        id: 'sports',
+        name: '体育游戏',
+        icon: '<i class="fas fa-futbol"></i>',
+        keywords: ['sports', 'ball', 'race', 'soccer', 'basketball']
+    },
+    racing: {
+        id: 'racing',
+        name: '赛车游戏',
+        icon: '<i class="fas fa-car"></i>',
+        keywords: ['racing', 'car', 'drive', 'speed', 'vehicle']
+    },
+    shooting: {
+        id: 'shooting',
+        name: '射击游戏',
+        icon: '<i class="fas fa-crosshairs"></i>',
+        keywords: ['shooting', 'gun', 'sniper', 'aim', 'target']
+    },
+    casual: {
+        id: 'casual',
+        name: '休闲游戏',
+        icon: '<i class="fas fa-smile"></i>',
+        keywords: ['casual', 'simple', 'relax', 'easy', 'fun']
+    }
+};
+
+// 自动分类函数
+function autoCategorizegame(game) {
+    // 基于游戏标题、描述和标签进行分类
+    const gameText = `${game.title} ${game.description} ${game.tags.join(' ')} ${game.subCategory || ''}`.toLowerCase();
+    
+    // 记录每个分类的匹配分数
+    const scores = {};
+    
+    // 计算每个分类的匹配度
+    Object.entries(categories).forEach(([categoryId, category]) => {
+        // 基础分数
+        let score = category.keywords.reduce((total, keyword) => {
+            const regex = new RegExp(keyword, 'gi');
+            const matches = (gameText.match(regex) || []).length;
+            return total + matches;
+        }, 0);
+        
+        // 额外规则
+        if (game.subCategory) {
+            // 子分类匹配加分
+            if (category.keywords.some(keyword => game.subCategory.toLowerCase().includes(keyword))) {
+                score += 2;
+            }
+        }
+        
+        // 特定类型判断
+        if (categoryId === 'action' && gameText.includes('combat')) score += 1;
+        if (categoryId === 'puzzle' && gameText.includes('solve')) score += 1;
+        if (categoryId === 'strategy' && gameText.includes('manage')) score += 1;
+        if (categoryId === 'casual' && gameText.includes('relax')) score += 1;
+        
+        scores[categoryId] = score;
+    });
+    
+    // 找出匹配度最高的分类
+    const bestMatch = Object.entries(scores).reduce((best, [categoryId, score]) => {
+        return score > best.score ? { categoryId, score } : best;
+    }, { categoryId: 'casual', score: 0 });
+    
+    return bestMatch.score > 0 ? bestMatch.categoryId : 'casual';
+}
+
+// 游戏数据
 export const gameData = [
     {
-        id: "rise-up",
-        title: "Rise Up",
-        category: "Action",
-        subCategory: "Arcade",
-        description: "Guide your balloon through challenging obstacles in this addictive arcade game. Test your reflexes and timing as you protect your balloon from increasingly difficult hazards.",
+        id: 'rise-up',
+        title: 'Rise Up',
+        description: '一个充满挑战的动作游戏，控制气球上升并避开障碍物。',
+        tags: ['action', 'arcade', 'balloon', 'obstacle'],
         rating: 4.5,
-        difficulty: "medium",
-        playCount: 150000,
-        releaseDate: "2023-01-15",
-        image: "https://img.cdn.famobi.com/portal/html5games/images/tmp/RiseUpTeaser.jpg",
-        url: "https://play.famobi.com/rise-up",
-        tags: ["arcade", "balloon", "obstacle", "challenging"],
-        features: ["Single Player", "Touch Controls", "High Scores"],
-        isFeatured: true,
+        difficulty: 'medium',
+        playCount: 250000,
+        image: 'path/to/rise-up.jpg',
         isNew: true
     },
     {
@@ -1623,28 +1712,43 @@ export const gameData = [
         tags: ["pirate", "defense", "simulation", "strategy"],
         features: ["Fortress Building", "Defense System", "Crew Management"]
     }
-];
+].map(game => ({
+    ...game,
+    category: autoCategorizegame(game)
+}));
 
-export const categories = {
-    "Action & Adventure": {
-        id: "action-adventure",
-        icon: "🎮",
-        subcategories: ["Action", "Adventure", "Arcade", "Runner", "Shooting", "Strategy", "Physics", "Racing", "Martial Arts", "Combat", "Ocean"]
-    },
-    "Puzzle & Strategy": {
-        id: "puzzle-strategy",
-        icon: "🧩",
-        subcategories: ["Puzzle", "Strategy", "Logic", "Memory", "Word", "Educational", "Classic", "Board", "Art", "Time Travel"]
-    },
-    "Casual & Simulation": {
-        id: "casual-simulation",
-        icon: "🎲",
-        subcategories: ["Casual", "Simulation", "Management", "Fashion", "Matching", "Coloring", "Building", "Education", "Manufacturing", "Business", "Fantasy"]
-    }
-};
-
+// 导出游戏难度等级
 export const difficulties = {
-    easy: "适合初学者",
-    medium: "需要一定技巧",
-    hard: "富有挑战性"
+    easy: '简单',
+    medium: '中等',
+    hard: '困难'
 };
+
+// 验证游戏分类分布
+function validateGameCategories(games) {
+    const distribution = {};
+    const uncategorized = [];
+    
+    games.forEach(game => {
+        if (!game.category) {
+            uncategorized.push(game.title);
+        } else {
+            distribution[game.category] = (distribution[game.category] || 0) + 1;
+        }
+    });
+    
+    console.log('游戏分类分布情况：');
+    Object.entries(distribution).forEach(([category, count]) => {
+        console.log(`${categories[category].name}: ${count}个游戏`);
+    });
+    
+    if (uncategorized.length > 0) {
+        console.log('\n未分类游戏：');
+        uncategorized.forEach(title => console.log(title));
+    }
+}
+
+// 执行验证
+validateGameCategories(gameData);
+
+export { gameData, categories, difficulties };
