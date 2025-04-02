@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Survivors - Free Online Games Platform</title>
+    <meta name="description" content="Monster Survivors offers 4000+ free online games, including action, puzzle, sports and more. No download required, play instantly on any device!">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HGCFBXD5NL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-HGCFBXD5NL');
+    </script>
+    
+    <!-- Google AdSense 代码 -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2231169922405054"
+     crossorigin="anonymous"></script>
+    
+    <!-- 预加载关键资源 -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- 核心样式 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- 预加载游戏数据 -->
+    <link rel="preload" href="js/gameData.js" as="script">
+    
+    <!-- 游戏数据脚本 -->
+    <script src="js/gameData.js"></script>
+    <script src="js/utils.js"></script>
+    
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Monster Survivors",
+      "url": "https://monstersurvivorsgames.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://monstersurvivorsgames.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "description": "4000+ free online games including action, puzzle, sports and more. No download required, play instantly!"
+    }
+    </script>
+</head>
+<body>
+    <!-- 移动端菜单切换按钮 -->
+    <button class="menu-toggle" aria-label="切换菜单">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- 侧边栏 -->
+    <aside class="sidebar" aria-label="网站导航">
+        <div class="sidebar-logo">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%237359ff'/%3E%3C/svg%3E" alt="Monster Survivors Logo" width="32" height="32">
+            <span>Monster Survivors</span>
+        </div>
+        
+        <!-- 关于我们 -->
+        <div class="nav-section">
+            <h3>关于我们</h3>
+            <p class="sidebar-description">Monster Survivors 提供最好的免费在线游戏集合，现在就开始游戏吧！</p>
+            <div class="sidebar-features">
+                <div class="feature">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <span>4000+ 游戏</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-users" aria-hidden="true"></i>
+                    <span>百万玩家</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                    <span>全平台支持</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 快速链接 -->
+        <nav class="nav-section">
+            <h3>快速链接</h3>
+            <a href="/featured" class="nav-item" aria-current="page">
+                <i class="fas fa-star" aria-hidden="true"></i>
+                <span>精选游戏</span>
+            </a>
+            <a href="/new" class="nav-item">
+                <i class="fas fa-plus" aria-hidden="true"></i>
+                <span>最新游戏</span>
+            </a>
+            <a href="/popular" class="nav-item">
+                <i class="fas fa-fire" aria-hidden="true"></i>
+                <span>热门游戏</span>
+            </a>
+            <a href="/categories" class="nav-item">
+                <i class="fas fa-th" aria-hidden="true"></i>
+                <span>所有分类</span>
+            </a>
+        </nav>
+
+        <!-- 游戏分类 -->
+        <nav class="nav-section" aria-label="游戏分类导航">
+            <h3>游戏分类</h3>
+            <a href="#" class="nav-item active" data-category="all">
+                <i class="fas fa-th-large" aria-hidden="true"></i>
+                <span>全部游戏</span>
+            </a>
+            <a href="#" class="nav-item" data-category="action">
+                <i class="fas fa-gamepad" aria-hidden="true"></i>
+                <span>动作</span>
+            </a>
+            <a href="#" class="nav-item" data-category="adventure">
+                <i class="fas fa-compass" aria-hidden="true"></i>
+                <span>冒险</span>
+            </a>
+            <a href="#" class="nav-item" data-category="puzzle">
+                <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
+                <span>益智</span>
+            </a>
+            <a href="#" class="nav-item" data-category="strategy">
+                <i class="fas fa-chess" aria-hidden="true"></i>
+                <span>策略</span>
+            </a>
+            <a href="#" class="nav-item" data-category="sports">
+                <i class="fas fa-futbol" aria-hidden="true"></i>
+                <span>体育</span>
+            </a>
+            <a href="#" class="nav-item" data-category="racing">
+                <i class="fas fa-car" aria-hidden="true"></i>
+                <span>赛车</span>
+            </a>
+            <a href="#" class="nav-item" data-category="shooting">
+                <i class="fas fa-crosshairs" aria-hidden="true"></i>
+                <span>射击</span>
+            </a>
+            <a href="#" class="nav-item" data-category="multiplayer">
+                <i class="fas fa-users" aria-hidden="true"></i>
+                <span>休闲</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- 主要内容区域 -->
+    <main class="main-content">
+        <!-- 顶部搜索栏 -->
+        <div class="top-bar">
+            <div class="search-bar" role="search">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input type="text" id="searchInput" placeholder="搜索游戏..." aria-label="搜索游戏">
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+        </div>
+
+        <!-- 游戏特性栏 -->
+        <div class="features-bar" aria-label="网站特性">
+            <div class="feature-item">
+                <i class="fas fa-gamepad" aria-hidden="true"></i>
+                <span>4000+ 游戏</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-download" aria-hidden="true"></i>
+                <span>无需下载</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                <span>全设备支持</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-users" aria-hidden="true"></i>
+                <span>多人游戏</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-gift" aria-hidden="true"></i>
+                <span>完全免费</span>
+            </div>
+        </div>
+
+        <!-- 分类标签 -->
+        <div class="categories-bar" role="tablist" aria-label="游戏分类">
+            <a href="#" class="category-tag active" data-category="all" role="tab" aria-selected="true">全部</a>
+            <a href="#" class="category-tag" data-category="action" role="tab" aria-selected="false">动作</a>
+            <a href="#" class="category-tag" data-category="adventure" role="tab" aria-selected="false">冒险</a>
+            <a href="#" class="category-tag" data-category="puzzle" role="tab" aria-selected="false">益智</a>
+            <a href="#" class="category-tag" data-category="strategy" role="tab" aria-selected="false">策略</a>
+            <a href="#" class="category-tag" data-category="sports" role="tab" aria-selected="false">体育</a>
+            <a href="#" class="category-tag" data-category="racing" role="tab" aria-selected="false">赛车</a>
+            <a href="#" class="category-tag" data-category="shooting" role="tab" aria-selected="false">射击</a>
+            <a href="#" class="category-tag" data-category="multiplayer" role="tab" aria-selected="false">多人</a>
+        </div>
+
+        <!-- 游戏网格 -->
+        <section class="games-grid" id="gamesGrid" aria-label="游戏列表">
+            <!-- 加载占位符 -->
+            <div class="loading-placeholder">
+                <div class="spinner" aria-hidden="true"></div>
+                <p>加载游戏中...</p>
+            </div>
+        </section>
+        
+        <!-- 加载更多按钮 -->
+        <div class="load-more-container">
+            <button id="loadMoreBtn" class="load-more-btn">加载更多游戏</button>
+        </div>
+    </main>
+
+    <!-- 游戏预览模态框 -->
+    <div id="gamePreviewModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modalTitle">
+        <div class="modal-content">
+            <button class="close-modal" aria-label="关闭预览">&times;</button>
+            <div class="modal-body">
+                <!-- 内容将由JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>关于我们</h3>
+                <p>Monster Survivors 提供最好的免费在线游戏集合。现在就开始游戏吧！</p>
+                <div class="footer-features">
+                    <div class="feature">
+                        <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        <span>4000+ 游戏</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-users" aria-hidden="true"></i>
+                        <span>百万玩家</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                        <span>全平台支持</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <ul>
+                    <li><a href="/featured"><i class="fas fa-star" aria-hidden="true"></i> 精选游戏</a></li>
+                    <li><a href="/new"><i class="fas fa-plus" aria-hidden="true"></i> 最新游戏</a></li>
+                    <li><a href="/popular"><i class="fas fa-fire" aria-hidden="true"></i> 热门游戏</a></li>
+                    <li><a href="/categories"><i class="fas fa-th" aria-hidden="true"></i> 所有分类</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>联系我们</h3>
+                <p>有任何问题或建议？请联系我们！</p>
+                <a href="mailto:contact@monstersurvivorsgames.com" class="contact-link">
+                    <i class="fas fa-envelope" aria-hidden="true"></i> contact@monstersurvivorsgames.com
+                </a>
+            </div>
+            <div class="footer-section">
+                <h3>关注我们</h3>
+                <div class="social-links">
+                    <a href="#" aria-label="关注我们的Facebook"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="关注我们的Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                    <a href="#" aria-label="关注我们的Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Monster Survivors. 保留所有权利。</p>
+        </div>
+    </footer>
+
+    <!-- 延迟加载的脚本 -->
+    <script src="js/imageLoader.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 

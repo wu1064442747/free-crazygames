@@ -1,0 +1,11 @@
+project/
+├── index.html
+├── css/
+│   ├── style.css
+│   └── responsive.css
+├── js/
+│   ├── main.js
+│   ├── gameData.js
+│   └── utils.js
+└── images/
+    └── placeholders/
